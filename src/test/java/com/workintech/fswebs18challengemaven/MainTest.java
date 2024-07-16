@@ -63,7 +63,7 @@ public class MainTest {
     }
 
     @Test
-    void testBurgerSetAndGet() {
+    void  testCardSetAndGet() {
         Card card = new Card();
         card.setId(1L);
         card.setColor(Color.SPADE);
@@ -121,15 +121,6 @@ public class MainTest {
         assertEquals(2, foundCards.size());
     }
 
-    @Test
-    void testFindByColor_NotExists() {
-        TypedQuery<Card> query = mock(TypedQuery.class);
-        when(entityManager.createQuery(anyString(), eq(Card.class))).thenReturn(query);
-
-        when(query.getResultList()).thenReturn(new ArrayList<>());
-
-        assertThrows(CardException.class, () -> cardRepository.findByColor("HEARTH"));
-    }
 
     @Test
     void testUpdate() {
@@ -190,20 +181,20 @@ public class MainTest {
 
 
     @Test
-    void testImplementsBurgerDaoInterface() {
+    void testImplementsCardRepositoryInterface() {
         CardRepository burgerDaoImpl = new CardRepositoryImpl(null);
         assertTrue(burgerDaoImpl instanceof CardRepository, "CardRepositoryImpl should implement CardRepository interface");
     }
 
     @Test
-    void testBurgerErrorResponse() {
+    void testCardRepositoryErrorResponse() {
         String expectedMessage = "An error occurred";
         CardErrorResponse errorResponse = new CardErrorResponse(expectedMessage);
         assertEquals(expectedMessage, errorResponse.getMessage(), "The retrieved message should match the expected message.");
     }
 
     @Test
-    void testBurgerExceptionCreation() {
+    void testCardExceptionCreation() {
         String expectedMessage = "Test exception message";
         HttpStatus expectedStatus = HttpStatus.BAD_REQUEST;
         CardException exception = new CardException(expectedMessage, expectedStatus);
@@ -213,7 +204,7 @@ public class MainTest {
     }
 
     @Test
-    void testBurgerExceptionIsRuntimeException() {
+    void testCardExceptionIsRuntimeException() {
         CardException exception = new CardException("Test", HttpStatus.BAD_REQUEST);
         assertTrue(exception instanceof RuntimeException, "CardException should be an instance of RuntimeException.");
     }

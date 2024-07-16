@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -158,18 +159,21 @@ class FswebS18ChallengeMavenApplicationTests {
 		Card updatedCard = new Card();
 		updatedCard.setId(1L);
 		updatedCard.setType(Type.KING);
-		given(cardRepository.update(any())).willReturn(updatedCard);
 
-		mockMvc.perform(put("/cards")
+		given(cardRepository.findById(1L)).willReturn(Optional.of(updatedCard));
+		given(cardRepository.save(any())).willReturn(updatedCard);
+
+		mockMvc.perform(put("/cards/{id}", 1L)
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(objectMapper.writeValueAsString(updatedCard)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.type", is(updatedCard.getType().toString())));
 	}
 
+
 	@Test
 	@DisplayName("Remove card test")
-	void testRemoveBurger() throws Exception {
+	void testRemoveCard() throws Exception {
 
 		given(cardRepository.remove(card.getId())).willReturn(card);
 
